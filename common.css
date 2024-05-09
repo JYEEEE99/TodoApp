@@ -1,0 +1,95 @@
+* {
+    box-sizing: border-box;
+}
+
+body {
+    background-color: blanchedalmond;
+    color: #222;
+}
+.todo__app {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 450px;
+    margin: 0 auto;
+}
+#header h1 {
+    font-size: 30px;
+    font-weight: 600;
+    text-align: center;
+    margin: 20px 0;
+}
+.write__box {
+    display: flex;
+    height: 30px;
+    justify-content: space-around;
+}
+#user__wirte {
+    width: 410px;
+    height: 30px;
+    margin: 0 auto;
+    border: none;
+    outline: none;
+    padding: 0 10px;
+    border-radius: 10px;
+    text-align: center;
+}
+#create__btn {
+    padding: 0;
+    margin-left: 10px;
+    width: 30px;
+    border: none;
+    background-color: white;
+    cursor: pointer;
+    border-radius: 5px;
+    color: #222;
+    transition: all 0.2s ease-in-out;
+}
+
+.todo__box {
+    margin-top: 15px;
+    background-color: white;
+    padding: 20px 0;
+    border-radius: 15px;
+    display: flex;
+    flex-direction: column;
+}
+.todo__list {
+    display: flex;
+    padding: 0 5px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    margin: 0 15px;
+    align-items: center;
+}
+.todo__list:not(:last-child) {
+    margin-bottom: 20px;
+}
+#user__todo {
+    height: 30px;
+    width: 300px;
+    margin: 0 15px;
+    text-align: center;
+    background-color: transparent;
+    border: none;
+}
+#edit__btn,
+#remove__btn {
+    width: 30px;
+    height: 30px;
+    background-color: white;
+    color: #222;
+    border: none;
+    border-radius: 5px;
+    transition: all 0.2s ease-in-out;
+    cursor: pointer;
+}
+#edit__btn {
+    margin-right: 5px;
+}
+#edit__btn:hover,
+#remove__btn:hover,
+#create__btn:hover {
+    background-color: #222;
+    color: white;
+}
