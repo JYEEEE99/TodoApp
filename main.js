@@ -1,6 +1,7 @@
 const createBtn = $("#create__btn");
 const userWriteInput = $("#user__wirte");
 const todoBox = $(".todo__box");
+const userTodoInput = $("#user__todo");
 
 const newTodo = function () {
   // 랜덤 키 생성
@@ -10,6 +11,7 @@ const newTodo = function () {
   const todoData = {
     id: randomNum,
     value: todoValue,
+    checked: false,
   };
   if (todoValue == "") {
     alert("할 일 목록을 작성해 주세요.");
@@ -49,9 +51,15 @@ $(document).ready(function () {
   // 순서대로 저장된 데이터를 역순으로 반복해서 화면에 추가
   localTodoData.reverse().forEach(function (todoData) {
     const todoListAdd = `
-    <div class="todo__list" id="${todoData.id}"> 
-                <input type="checkbox" id="ckbox">
-                <input type="text" disabled id="user__todo" value="${todoData.value}"> 
+    <div class="todo__list ${todoData.checked ? "complete" : ""}" id="${
+      todoData.id
+    }"> 
+                <input type="checkbox" id="ckbox" ${
+                  todoData.checked ? "checked" : ""
+                }>
+                <input type="text" disabled id="user__todo" value="${
+                  todoData.value
+                }"> 
                 <i class="fa-regular fa-pen-to-square" id="edit__btn"></i>
                 <i class="fa-solid fa-eraser" id="remove__btn"></i>
             </div>`;
@@ -74,35 +82,84 @@ todoBox.on("click", "#remove__btn", function () {
 
 // 체크박스 체크on off 기능
 todoBox.on("change", "#ckbox", function () {
-  // 체크박스에 저장된 count 값을 가져온다. 없으면 초기값 0을 사용
-  let ckCount = $(this).data("count") || 0;
-
-  // 카운트를 증가시킨다
-  ckCount++;
-
-  // 체크박스에 새로운 count 값을 저장
-  $(this).data("count", ckCount);
-
-  // 홀수, 짝수에 따라 클래스 추가 또는 제거
-  if (ckCount % 2 === 1) {
-    $(this).parent().addClass("complete");
-  } else {
+  if ($(this).parent().hasClass("complete")) {
     $(this).parent().removeClass("complete");
+  } else {
+    $(this).parent().addClass("complete");
   }
+  const todoId = $(this).closest(".todo__list").attr("id");
+  const isChecked = $(this).prop("checked");
+
+  let localTodoData = JSON.parse(localStorage.getItem("todos")) || [];
+  const todoIndex = localTodoData.findIndex((todo) => todo.id === todoId);
+  localTodoData[todoIndex].checked = isChecked;
+  localStorage.setItem("todos", JSON.stringify(localTodoData));
 });
 
 // editBtn 수정 기능
 let editCount = 0;
 todoBox.on("click", "#edit__btn", function () {
-  editCount++;
-  // 카운트 0 부터 시작 첫 번째 클릭 = 1 2번 째 클릭 = 2
-  if (editCount % 2 === 1) {
-    // 카운트가 홀 수 일때 check로 아이콘 변경
-    $(this).removeClass();
-    $(this).addClass("fa-solid fa-check");
-  } else {
-    // 카운트가 짝 수 일때 pen으로 아이 콘 변경
-    $(this).removeClass();
-    $(this).addClass("fa-regular fa-pen-to-square");
+  // 클릭된 에딧 버튼의 부모 요소인 todo__list의 id 값을 가져옵니다.
+  const todoId = $(this).closest(".todo__list").attr("id");
+
+  // 해당 todo의 체크박스가 체크된 상태인지 확인합니다.
+  const isChecked = $(this)
+    .closest(".todo__list")
+    .find("#ckbox")
+    .prop("checked");
+
+  // 체크박스가 체크되어 있으면 수정할 수 없도록 합니다.
+  if (isChecked) {
+    return; // 수정할 수 없는 상태이므로 함수를 종료합니다.
   }
+
+  // 에딧 카운트를 증가시킵니다.
+  editCount++;
+
+  // 에딧 카운트가 홀수일 때(수정 모드일 때)
+  if (editCount % 2 === 1) {
+    // 에딧 버튼 아이콘을 체크 모양으로 변경합니다.
+    $(this).removeClass().addClass("fa-solid fa-check");
+
+    // 해당 todo의 텍스트 input을 활성화하고 포커스를 줍니다.
+    $(this)
+      .closest(".todo__list")
+      .find("input[type='text']")
+      .removeAttr("disabled")
+      .focus();
+  } else {
+    // 에딧 카운트가 짝수일 때(수정 완료 모드일 때)
+    // 에딧 버튼 아이콘을 다시 펜으로 변경합니다.
+    $(this).removeClass().addClass("fa-regular fa-pen-to-square");
+
+    // 수정된 텍스트를 가져옵니다.
+    const editedValue = $(this)
+      .closest(".todo__list")
+      .find("input[type='text']")
+      .val();
+
+    // 로컬 스토리지에서 해당 할 일 데이터를 가져옵니다.
+    let localTodoData = JSON.parse(localStorage.getItem("todos")) || [];
+
+    // 해당 ID와 일치하는 할 일 데이터를 찾습니다.
+    const matchedTodo = localTodoData.find((todo) => todo.id === todoId);
+
+    // 수정된 값을 할 일 데이터에 반영합니다.
+    matchedTodo.value = editedValue;
+
+    // 수정된 할 일 데이터를 다시 로컬 스토리지에 저장합니다.
+    localStorage.setItem("todos", JSON.stringify(localTodoData));
+
+    // 수정이 완료되면 텍스트 input을 비활성화합니다.
+    $(this)
+      .closest(".todo__list")
+      .find("input[type='text']")
+      .attr("disabled", true);
+  }
+});
+
+// reset 버튼 클릭 시 모든 로컬 스토리지 삭제
+$("#reset").click(function () {
+  localStorage.removeItem("todos");
+  location.reload();
 });

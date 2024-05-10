@@ -3,15 +3,19 @@
 }
 
 body {
-    background-color: blanchedalmond;
     color: #222;
 }
 .todo__app {
     display: flex;
     flex-direction: column;
     align-items: center;
-    width: 450px;
+    width: 520px;
     margin: 0 auto;
+    box-shadow: 1px 3px 10px rgba(0,0,0,0.1);
+    padding: 30px 0 40px;
+    margin-top: 50px;
+    border-radius: 15px;
+    background-color: blanchedalmond;
 }
 #header h1 {
     font-size: 30px;
@@ -33,6 +37,7 @@ body {
     padding: 0 10px;
     border-radius: 10px;
     text-align: center;
+    box-shadow: 1px 1px 3px rgba(0,0,0,0.1);
 }
 #create__btn {
     padding: 0;
@@ -44,6 +49,7 @@ body {
     border-radius: 5px;
     color: #222;
     transition: all 0.2s ease-in-out;
+    box-shadow: 1px 1px 3px rgba(0,0,0,0.1);
 }
 
 .todo__box {
@@ -54,6 +60,7 @@ body {
     display: flex;
     flex-direction: column;
     position: relative;
+    box-shadow: 1px 1px 3px rgba(0,0,0,0.1);
 }
 .todo__title {
     text-align: center;
@@ -85,6 +92,7 @@ body {
     text-align: center;
     background-color: transparent;
     border: none;
+    position: relative;
 }
 #edit__btn,
 #remove__btn {
@@ -103,6 +111,7 @@ body {
 #edit__btn {
     margin-right: 5px;
 }
+#reset:hover,
 #edit__btn:hover,
 #remove__btn:hover,
 #create__btn:hover {
@@ -117,13 +126,30 @@ body {
     opacity: 0.5;
     position: relative;
 }
-.complete::before {
+
+.complete #user__todo::before {
     content: "";
     position: absolute;
     background-color: #222;
     height: 1px;
     top: 50;
-    right: -5px;
-    left: -5px;
+    width: 100%;
+}
 
+main {
+    display: flex;
+    flex-direction: column;
+}
+#reset {
+    margin-top:  15px;
+    height: 30px;
+    border: none;
+    background-color: white;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: all 0.2s ease-in-out;
+    font-size: 14px;
+    font-weight: 700;
+    letter-spacing: 3px;
+    box-shadow: 1px 1px 3px rgba(0,0,0,0.1);
 }
