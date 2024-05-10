@@ -27,7 +27,7 @@ const newTodo = function () {
                 <input type="checkbox" id="ckbox">
                 <input type="text" disabled id="user__todo" value="${todoData.value}"> 
                 <i class="fa-regular fa-pen-to-square" id="edit__btn"></i>
-                <i class="fa-solid fa-eraser" id"remove__btn"></i>
+                <i class="fa-solid fa-eraser" id="remove__btn"></i>
             </div>`;
     todoBox.prepend(todoListAdd);
     userWriteInput.val("");
